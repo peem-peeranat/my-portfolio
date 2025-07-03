@@ -429,3 +429,12 @@ body,
 .toggle input:checked + .toggle-mark {
   transition: all 0.15s ease !important;
 }
+
+/* Thai font override for specific elements */
+[data-font="thai"] {
+  font-family: var(--font-thai) !important;
+}
+html[lang="th"] [data-font="thai"],
+html[lang="th-TH"] [data-font="thai"] {
+  font-family: var(--font-thai) !important;
+}

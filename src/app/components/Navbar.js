@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from './ThemeProvider';
 

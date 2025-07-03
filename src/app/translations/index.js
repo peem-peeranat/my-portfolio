@@ -42,8 +42,8 @@ export const translations = {
     // Contact
     contact: "Contact",
     contactDescription: "Let's work together",
-    getInTouch: "Get in Touch",
-    contactDescription2: "I'm always interested in new opportunities and exciting projects. Feel free to reach out!",
+    getInTouch: "Contact",
+    contactDescription2: "If you're interested in new opportunities or have an exciting project, feel free to reach out! :)",
     name: "Name",
     email: "Email",
     message: "Message",
@@ -100,8 +100,8 @@ export const translations = {
     // Contact
     contact: "ติดต่อ",
     contactDescription: "มาทำงานร่วมกัน",
-    getInTouch: "ติดต่อผม",
-    contactDescription2: "ผมสนใจโอกาสใหม่ๆ และโปรเจคที่น่าตื่นเต้นเสมอ อย่าลังเลที่จะติดต่อมา!",
+    getInTouch: "ติดต่อ",
+    contactDescription2: "สนใจงานใหม่ๆ หรือมีโปรเจกต์ที่น่าสนใจ ติดต่อมาได้เลยครับ :)",
     name: "ชื่อ",
     email: "อีเมล",
     message: "ข้อความ",

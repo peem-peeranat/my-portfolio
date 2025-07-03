@@ -206,7 +206,7 @@ const projects = [
 ];
 
 const ProjectsPage = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllProjects, setShowAllProjects] = useState(false);
 
@@ -246,11 +246,11 @@ const ProjectsPage = () => {
           className="mb-8 sm:mb-12 lg:mb-16 text-center"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
-            <span className="text-base-content">{t('projects')}</span>
+            <span className={`text-base-content ${language === 'th' && /[\u0E00-\u0E7F]/.test(t('projects')) ? 'font-thai' : 'font-english'}`}>{t('projects')}</span>
           </h2>
           <div className="w-12 lg:w-16 h-1 bg-base-content/30 mt-3 lg:mt-4 mx-auto"></div>
           <p className="text-base lg:text-lg text-base-content/80 mt-4 lg:mt-6 max-w-2xl mx-auto px-4">
-            {t('projectsDescription')}
+            <span className={`${language === 'th' && /[\u0E00-\u0E7F]/.test(t('projectsDescription')) ? 'font-thai' : 'font-english'}`}>{t('projectsDescription')}</span>
           </p>
         </motion.div>
 
@@ -274,7 +274,7 @@ const ProjectsPage = () => {
                     : 'bg-base-100/50 text-base-content/70 hover:bg-base-100 hover:text-base-content border border-base-content/10'
                     }`}
                 >
-                  {category}
+                  <span data-font="english">{category}</span>
                 </button>
               ))}
             </div>
@@ -291,7 +291,7 @@ const ProjectsPage = () => {
                   : 'bg-base-100/50 text-base-content/70 hover:bg-base-100 hover:text-base-content border border-base-content/10'
                   }`}
               >
-                {category}
+                <span data-font="english">{category}</span>
               </button>
             ))}
           </div>
@@ -345,11 +345,15 @@ const ProjectsPage = () => {
                 </div>
               </div>
 
-              <h3 className="text-lg lg:text-xl font-medium text-base-content mb-2 group-hover:text-primary transition-colors duration-300" data-font="english">
+              <h3
+                className={`text-lg lg:text-xl font-medium text-base-content mb-2 group-hover:text-primary transition-colors duration-300 ${language === 'th' && /[\u0E00-\u0E7F]/.test(project.title) ? 'font-thai' : 'font-english'}`}
+              >
                 {project.title}
               </h3>
 
-              <p className="text-sm lg:text-base text-base-content/80 mb-3 lg:mb-4 leading-relaxed" data-font="english">
+              <p
+                className={`text-sm lg:text-base text-base-content/80 mb-3 lg:mb-4 leading-relaxed ${language === 'th' && /[\u0E00-\u0E7F]/.test(project.description) ? 'font-thai' : 'font-english'}`}
+              >
                 {project.description}
               </p>
 
@@ -375,7 +379,7 @@ const ProjectsPage = () => {
                     whileTap={{ scale: 0.98 }}
                     className="inline-flex items-center text-primary text-sm font-medium hover:text-primary/80 transition-colors duration-300"
                   >
-                    {project.category === 'Video Production' ? 'Watch Video' : 'Live Demo'}
+                    <span data-font="english">{project.category === 'Video Production' ? 'Watch Video' : 'Live Demo'}</span>
                     <svg
                       width="16"
                       height="16"
@@ -397,7 +401,7 @@ const ProjectsPage = () => {
                     whileTap={{ scale: 0.98 }}
                     className="inline-flex items-center text-base-content/70 text-sm font-medium hover:text-base-content transition-colors duration-300"
                   >
-                    GitHub
+                    <span data-font="english">GitHub</span>
                     <svg
                       width="16"
                       height="16"
@@ -470,11 +474,15 @@ const ProjectsPage = () => {
                   </div>
                 </div>
 
-                <h3 className="text-lg lg:text-xl font-medium text-base-content mb-2 group-hover:text-primary transition-colors duration-300" data-font="english">
+                <h3
+                  className={`text-lg lg:text-xl font-medium text-base-content mb-2 group-hover:text-primary transition-colors duration-300 ${language === 'th' && /[\u0E00-\u0E7F]/.test(project.title) ? 'font-thai' : 'font-english'}`}
+                >
                   {project.title}
                 </h3>
 
-                <p className="text-sm lg:text-base text-base-content/80 mb-3 lg:mb-4 leading-relaxed" data-font="english">
+                <p
+                  className={`text-sm lg:text-base text-base-content/80 mb-3 lg:mb-4 leading-relaxed ${language === 'th' && /[\u0E00-\u0E7F]/.test(project.description) ? 'font-thai' : 'font-english'}`}
+                >
                   {project.description}
                 </p>
 
@@ -500,7 +508,7 @@ const ProjectsPage = () => {
                       whileTap={{ scale: 0.98 }}
                       className="inline-flex items-center text-primary text-sm font-medium hover:text-primary/80 transition-colors duration-300"
                     >
-                      {project.category === 'Video Production' ? 'Watch Video' : 'Live Demo'}
+                      <span data-font="english">{project.category === 'Video Production' ? 'Watch Video' : 'Live Demo'}</span>
                       <svg
                         width="16"
                         height="16"
@@ -522,7 +530,7 @@ const ProjectsPage = () => {
                       whileTap={{ scale: 0.98 }}
                       className="inline-flex items-center text-base-content/70 text-sm font-medium hover:text-base-content transition-colors duration-300"
                     >
-                      GitHub
+                      <span data-font="english">GitHub</span>
                       <svg
                         width="16"
                         height="16"
@@ -554,7 +562,7 @@ const ProjectsPage = () => {
               onClick={showMoreProjects}
               className="inline-block px-6 lg:px-8 py-2.5 lg:py-3 bg-primary text-base-100 hover:bg-primary/90 rounded-lg transition-all duration-300 ease-in-out glow-on-hover magnetic text-sm lg:text-base"
             >
-              {t('viewAllProjects')}
+              <span className={`${language === 'th' && /[\u0E00-\u0E7F]/.test(t('viewAllProjects')) ? 'font-thai' : 'font-english'}`}>{t('viewAllProjects')}</span>
             </button>
           )}
         </motion.div>

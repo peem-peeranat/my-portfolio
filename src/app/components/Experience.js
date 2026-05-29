@@ -7,6 +7,18 @@ export default function Experience() {
 
   const experiences = [
     {
+      year: "Jul 2025 - Present",
+      title: "Full Stack Developer",
+      company: "Siamraj Public Company Limited",
+      description: [
+        "Ship enterprise workflow and document platforms at Siamraj for PTTGC and KB J Capital clients",
+        "E-Flow (PTTGC): Built and maintained Next.js 15 + React features — workflow builder, approval flows, paper forms, and reporting (Redux Toolkit, Prisma)",
+        "DDMS (KB J Capital): Delivered SvelteKit 5 + TypeScript features and full-stack fixes on Elixir/Phoenix — dynamic forms, approval workflows, report aggregation, and paper-form flows",
+        "Fixed production workflow bugs across frontend and backend — approver step labels, request-change flows, draft attachment sync, and report total consistency",
+        "Maintained quality with Jest, Cypress, Vitest, and Playwright; collaborated via GitHub Issues, pull requests, and code review"
+      ]
+    },
+    {
       year: "Jul 2024 - Apr 2025",
       title: "Front End Developer",
       company: "ADOP",

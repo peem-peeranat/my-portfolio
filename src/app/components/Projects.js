@@ -2,10 +2,22 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import ProjectGalleryModal from './ProjectGalleryModal';
+
+const ddmsGallery = Array.from(
+  { length: 35 },
+  (_, index) => `/img/ddms/ddms-${String(index + 1).padStart(2, '0')}.png`
+);
+
+const eflowGallery = Array.from(
+  { length: 24 },
+  (_, index) => `/img/eflow/eflow-${String(index + 1).padStart(2, '0')}.png`
+);
 
 // Categories for filtering
 const categories = [
   'All',
+  'Enterprise',
   'Corporate',
   'Mini Project',
   'Video Production'
@@ -13,6 +25,28 @@ const categories = [
 
 // Real projects data
 const projects = [
+  {
+    id: 0,
+    title: 'DDMS — Document & Data Management System',
+    description: 'Enterprise document and workflow platform for KB J Capital — approval flows, dynamic forms, paper forms, and reporting',
+    image: '/img/ddms/ddms-01.png',
+    category: 'Enterprise',
+    github: '',
+    demo: '',
+    gallery: ddmsGallery,
+    tech: ['SvelteKit 5', 'TypeScript', 'Tailwind CSS', 'Playwright', 'Elixir/Phoenix', 'PostgreSQL']
+  },
+  {
+    id: 20,
+    title: 'E-Flow — Enterprise Workflow Platform',
+    description: 'Workflow and document management platform for PTTGC — approval flows, dynamic forms, paper forms, DocuSign, and reporting',
+    image: '/img/eflow/eflow-01.png',
+    category: 'Enterprise',
+    github: '',
+    demo: '',
+    gallery: eflowGallery,
+    tech: ['Next.js 15', 'React 18', 'TypeScript', 'Redux Toolkit', 'Tailwind CSS', 'Prisma']
+  },
   {
     id: 1,
     title: 'Foxbith Official Website',
@@ -209,6 +243,15 @@ const ProjectsPage = () => {
   const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [galleryProject, setGalleryProject] = useState(null);
+
+  const openGallery = (project) => {
+    if (project.gallery?.length) {
+      setGalleryProject(project);
+    }
+  };
+
+  const closeGallery = () => setGalleryProject(null);
 
   // Filter projects based on selected category
   const filteredProjects = selectedCategory === 'All'
@@ -308,7 +351,7 @@ const ProjectsPage = () => {
               className="group relative"
             >
               {/* Main project link - covers entire card */}
-              {project.demo && (
+              {project.demo ? (
                 <motion.a
                   href={project.demo}
                   target="_blank"
@@ -317,14 +360,23 @@ const ProjectsPage = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 />
-              )}
+              ) : project.gallery?.length ? (
+                <motion.button
+                  type="button"
+                  onClick={() => openGallery(project)}
+                  className="absolute inset-0 z-10 cursor-pointer bg-transparent border-0 p-0"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  aria-label={`View ${project.title} screenshots`}
+                />
+              ) : null}
 
               {/* Mockup frame around the image */}
               <div className="relative mb-4 lg:mb-6">
                 <div className="absolute -inset-2 lg:-inset-4 border border-base-content/10 rounded-xl z-0"></div>
                 <div className="relative overflow-hidden rounded-lg aspect-video border border-base-content/10 z-10">
                   {/* Image-specific link - covers only the image */}
-                  {project.demo && (
+                  {project.demo ? (
                     <motion.a
                       href={project.demo}
                       target="_blank"
@@ -333,12 +385,21 @@ const ProjectsPage = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     />
-                  )}
+                  ) : project.gallery?.length ? (
+                    <motion.button
+                      type="button"
+                      onClick={() => openGallery(project)}
+                      className="absolute inset-0 z-20 cursor-pointer bg-transparent border-0 p-0"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      aria-label={`View ${project.title} screenshots`}
+                    />
+                  ) : null}
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover transition-all duration-500 group-hover:scale-105"
+                    className="object-cover object-top transition-all duration-500 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-base-content/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -414,6 +475,27 @@ const ProjectsPage = () => {
                     </svg>
                   </motion.a>
                 )}
+                {!project.demo && project.gallery?.length > 0 && (
+                  <motion.button
+                    type="button"
+                    onClick={() => openGallery(project)}
+                    whileHover={{ x: 5 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="inline-flex items-center text-primary text-sm font-medium hover:text-primary/80 transition-colors duration-300"
+                  >
+                    <span data-font="english">View Screenshots</span>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      className="ml-1 transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                )}
               </div>
             </motion.div>
           ))}
@@ -437,7 +519,7 @@ const ProjectsPage = () => {
                 className="group relative"
               >
                 {/* Main project link - covers entire card */}
-                {project.demo && (
+                {project.demo ? (
                   <motion.a
                     href={project.demo}
                     target="_blank"
@@ -446,14 +528,23 @@ const ProjectsPage = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   />
-                )}
+                ) : project.gallery?.length ? (
+                  <motion.button
+                    type="button"
+                    onClick={() => openGallery(project)}
+                    className="absolute inset-0 z-10 cursor-pointer bg-transparent border-0 p-0"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-label={`View ${project.title} screenshots`}
+                  />
+                ) : null}
 
                 {/* Mockup frame around the image */}
                 <div className="relative mb-4 lg:mb-6">
                   <div className="absolute -inset-2 lg:-inset-4 border border-base-content/10 rounded-xl z-0"></div>
                   <div className="relative overflow-hidden rounded-lg aspect-video border border-base-content/10 z-10">
                     {/* Image-specific link - covers only the image */}
-                    {project.demo && (
+                    {project.demo ? (
                       <motion.a
                         href={project.demo}
                         target="_blank"
@@ -462,12 +553,21 @@ const ProjectsPage = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       />
-                    )}
+                    ) : project.gallery?.length ? (
+                      <motion.button
+                        type="button"
+                        onClick={() => openGallery(project)}
+                        className="absolute inset-0 z-20 cursor-pointer bg-transparent border-0 p-0"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        aria-label={`View ${project.title} screenshots`}
+                      />
+                    ) : null}
                     <Image
                       src={project.image}
                       alt={project.title}
                       fill
-                      className="object-cover transition-all duration-500 group-hover:scale-105"
+                      className="object-cover object-top transition-all duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-base-content/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -543,6 +643,27 @@ const ProjectsPage = () => {
                       </svg>
                     </motion.a>
                   )}
+                  {!project.demo && project.gallery?.length > 0 && (
+                    <motion.button
+                      type="button"
+                      onClick={() => openGallery(project)}
+                      whileHover={{ x: 5 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center text-primary text-sm font-medium hover:text-primary/80 transition-colors duration-300"
+                    >
+                      <span data-font="english">View Screenshots</span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="ml-1 transition-transform duration-300 group-hover:translate-x-1"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </motion.button>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -567,6 +688,13 @@ const ProjectsPage = () => {
           )}
         </motion.div>
       </div>
+
+      <ProjectGalleryModal
+        isOpen={Boolean(galleryProject)}
+        onClose={closeGallery}
+        title={galleryProject?.title ?? ''}
+        images={galleryProject?.gallery ?? []}
+      />
     </section>
   );
 };

@@ -13,12 +13,16 @@ const SkillsPage = () => {
     {
       category: 'Frontend',
       items: [
+        { name: 'Next.js', icon: <SiNextdotjs className="text-base-content/80" /> },
+        { name: 'React', icon: <FaReact className="text-base-content/80" /> },
+        { name: 'TypeScript', icon: <SiTypescript className="text-base-content/80" /> },
+        { name: 'SvelteKit', icon: <span className="text-base-content/80 font-medium" data-font="english">SK</span> },
+        { name: 'Redux Toolkit', icon: <span className="text-base-content/80 font-medium" data-font="english">RTK</span> },
+        { name: 'TanStack Query', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Tailwind CSS', icon: <SiCss3 className="text-base-content/80" /> },
         { name: 'HTML', icon: <SiHtml5 className="text-base-content/80" /> },
         { name: 'CSS', icon: <SiCss3 className="text-base-content/80" /> },
         { name: 'JavaScript', icon: <SiJavascript className="text-base-content/80" /> },
-        { name: 'React', icon: <FaReact className="text-base-content/80" /> },
-        { name: 'Next.js', icon: <SiNextdotjs className="text-base-content/80" /> },
-        { name: 'TypeScript', icon: <SiTypescript className="text-base-content/80" /> },
         { name: 'Material UI', icon: <span className="text-base-content/80 font-medium" data-font="english">MUI</span> },
         { name: 'Bootstrap', icon: <SiBootstrap className="text-base-content/80" /> },
       ]
@@ -26,8 +30,12 @@ const SkillsPage = () => {
     {
       category: 'Backend & Databases',
       items: [
+        { name: 'Elixir', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Phoenix', icon: <BiCodeAlt className="text-base-content/80" /> },
         { name: 'Node.js', icon: <FaNodeJs className="text-base-content/80" /> },
         { name: 'Express.js', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Prisma', icon: <FaDatabase className="text-base-content/80" /> },
+        { name: 'PostgreSQL', icon: <FaDatabase className="text-base-content/80" /> },
         { name: 'RESTful API', icon: <BiCodeAlt className="text-base-content/80" /> },
         { name: 'GraphQL', icon: <SiGraphql className="text-base-content/80" /> },
         { name: 'MySQL', icon: <SiMysql className="text-base-content/80" /> },
@@ -45,6 +53,17 @@ const SkillsPage = () => {
         { name: 'Git & GitHub', icon: <FaGitAlt className="text-base-content/80" /> },
         { name: 'Google Analytics 4', icon: <FaGoogle className="text-base-content/80" /> },
         { name: 'Google Tag Manager', icon: <FaGoogle className="text-base-content/80" /> },
+      ]
+    },
+    {
+      category: 'Testing & Tooling',
+      items: [
+        { name: 'Jest', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Cypress', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Playwright', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Vitest', icon: <BiCodeAlt className="text-base-content/80" /> },
+        { name: 'Bun', icon: <span className="text-base-content/80 font-medium" data-font="english">Bun</span> },
+        { name: 'Zod', icon: <BiCodeAlt className="text-base-content/80" /> },
       ]
     },
     {
@@ -94,7 +113,7 @@ const SkillsPage = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skills.map((skillCategory, index) => (
             <motion.div
               key={skillCategory.category}

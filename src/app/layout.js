@@ -6,8 +6,13 @@ import CustomCursor from './components/CustomCursor'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: "Peeranat - Portfolio",
-  description: "Frontend Developer Portfolio",
+  title: "Peeranat | Full Stack Developer — Enterprise Workflow Systems",
+  description: "Full Stack Developer at Siamraj building E-Flow (PTTGC) and DDMS (KB J Capital) — Next.js, SvelteKit, Elixir/Phoenix, and production workflow platforms.",
+  openGraph: {
+    title: "Peeranat | Full Stack Developer",
+    description: "Enterprise document & workflow systems — E-Flow, DDMS, Siamraj.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {

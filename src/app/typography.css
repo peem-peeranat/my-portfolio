@@ -1,0 +1,42 @@
+/* Select each glyph by script, independently of the interface language.
+   next/font's generated Arial fallback is disabled so it cannot intercept
+   Thai glyphs before Noto Sans Thai in these shared font stacks. */
+:root {
+  --body: var(--font-body), var(--font-thai), "Helvetica Neue", Arial, sans-serif;
+  --display: var(--font-display), var(--font-thai), Impact, "Arial Narrow", sans-serif;
+}
+
+body,
+html[lang="th"] body {
+  font-family: var(--body);
+}
+
+.display,
+.experience-title h3,
+.project-main h3,
+html[lang="th"] .local-display,
+html[lang="th"] .experience-title h3,
+html[lang="th"] .project-main h3 {
+  font-family: var(--display);
+  /* Bebas has one regular face; never manufacture a bold Latin display face
+     when the Thai glyphs in the same heading need their native bold weight. */
+  font-synthesis: none;
+}
+
+.local-display,
+.experience-title h3,
+.project-main h3,
+.success-dialog .display {
+  font-weight: 700;
+}
+
+/* These titles can contain either script, including Thai project names while
+   the interface is English. Leave room for Thai vowels and tone marks. */
+.experience-title h3,
+.project-main h3,
+.success-dialog .display,
+html[lang="th"] .experience-title h3,
+html[lang="th"] .project-main h3,
+html[lang="th"] .local-display {
+  line-height: 1.12;
+}

@@ -1,9 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  agentRules: false,
+  // Keep the local development badge from covering the mobile bottom navigation.
+  devIndicators: false,
   images: {
-    domains: ['images.unsplash.com', 'img.youtube.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'img.youtube.com' },
+    ],
   },
-  // ... other config
 }
 
 export default nextConfig;

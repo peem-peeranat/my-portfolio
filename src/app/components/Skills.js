@@ -1,149 +1,109 @@
-import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaWordpress, FaGitAlt, FaDatabase, FaGoogle } from 'react-icons/fa';
-import { SiNextdotjs, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiBootstrap, SiGraphql, SiMysql, SiFirebase, SiStrapi } from 'react-icons/si';
-import { TbBrandWebflow } from 'react-icons/tb';
-import { BiCodeAlt } from 'react-icons/bi';
-import { FiFilm } from 'react-icons/fi';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { scrollPageTo } from './SmoothScroll';
 
-const SkillsPage = () => {
-  const { t } = useLanguage();
+const skillGroups = [
+  ['Frontend', ['Next.js', 'React', 'TypeScript', 'SvelteKit', 'Redux Toolkit', 'TanStack Query', 'Tailwind CSS', 'HTML', 'CSS', 'JavaScript', 'Material UI', 'Bootstrap']],
+  ['Backend & Databases', ['Elixir', 'Phoenix', 'Node.js', 'Express.js', 'Prisma', 'PostgreSQL', 'RESTful API', 'GraphQL', 'MySQL', 'SQL', 'NoSQL', 'Firebase']],
+  ['CMS & Tools', ['Wordpress', 'Webflow', 'Strapi', 'Git & GitHub', 'Google Analytics 4', 'Google Tag Manager']],
+  ['Testing & Tooling', ['Jest', 'Cypress', 'Playwright', 'Vitest', 'Bun', 'Zod']],
+  ['Design & Video', ['Photoshop', 'Premiere Pro', 'After Effects', 'DaVinci Resolve']],
+];
 
-  const skills = [
-    {
-      category: 'Frontend',
-      items: [
-        { name: 'Next.js', icon: <SiNextdotjs className="text-base-content/80" /> },
-        { name: 'React', icon: <FaReact className="text-base-content/80" /> },
-        { name: 'TypeScript', icon: <SiTypescript className="text-base-content/80" /> },
-        { name: 'SvelteKit', icon: <span className="text-base-content/80 font-medium" data-font="english">SK</span> },
-        { name: 'Redux Toolkit', icon: <span className="text-base-content/80 font-medium" data-font="english">RTK</span> },
-        { name: 'TanStack Query', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Tailwind CSS', icon: <SiCss3 className="text-base-content/80" /> },
-        { name: 'HTML', icon: <SiHtml5 className="text-base-content/80" /> },
-        { name: 'CSS', icon: <SiCss3 className="text-base-content/80" /> },
-        { name: 'JavaScript', icon: <SiJavascript className="text-base-content/80" /> },
-        { name: 'Material UI', icon: <span className="text-base-content/80 font-medium" data-font="english">MUI</span> },
-        { name: 'Bootstrap', icon: <SiBootstrap className="text-base-content/80" /> },
-      ]
-    },
-    {
-      category: 'Backend & Databases',
-      items: [
-        { name: 'Elixir', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Phoenix', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Node.js', icon: <FaNodeJs className="text-base-content/80" /> },
-        { name: 'Express.js', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Prisma', icon: <FaDatabase className="text-base-content/80" /> },
-        { name: 'PostgreSQL', icon: <FaDatabase className="text-base-content/80" /> },
-        { name: 'RESTful API', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'GraphQL', icon: <SiGraphql className="text-base-content/80" /> },
-        { name: 'MySQL', icon: <SiMysql className="text-base-content/80" /> },
-        { name: 'SQL', icon: <FaDatabase className="text-base-content/80" /> },
-        { name: 'NoSQL', icon: <FaDatabase className="text-base-content/80" /> },
-        { name: 'Firebase', icon: <SiFirebase className="text-base-content/80" /> },
-      ]
-    },
-    {
-      category: 'CMS & Tools',
-      items: [
-        { name: 'Wordpress', icon: <FaWordpress className="text-base-content/80" /> },
-        { name: 'Webflow', icon: <TbBrandWebflow className="text-base-content/80" /> },
-        { name: 'Strapi', icon: <SiStrapi className="text-base-content/80" /> },
-        { name: 'Git & GitHub', icon: <FaGitAlt className="text-base-content/80" /> },
-        { name: 'Google Analytics 4', icon: <FaGoogle className="text-base-content/80" /> },
-        { name: 'Google Tag Manager', icon: <FaGoogle className="text-base-content/80" /> },
-      ]
-    },
-    {
-      category: 'Testing & Tooling',
-      items: [
-        { name: 'Jest', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Cypress', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Playwright', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Vitest', icon: <BiCodeAlt className="text-base-content/80" /> },
-        { name: 'Bun', icon: <span className="text-base-content/80 font-medium" data-font="english">Bun</span> },
-        { name: 'Zod', icon: <BiCodeAlt className="text-base-content/80" /> },
-      ]
-    },
-    {
-      category: 'Design & Video',
-      items: [
-        { name: 'Photoshop', icon: <FiFilm className="text-base-content/80" /> },
-        { name: 'Premiere Pro', icon: <FiFilm className="text-base-content/80" /> },
-        { name: 'After Effects', icon: <FiFilm className="text-base-content/80" /> },
-        { name: 'DaVinci Resolve', icon: <FiFilm className="text-base-content/80" /> },
-      ]
-    }
-  ];
+const horizontalQuery = '(min-width: 761px) and (min-height: 620px) and (prefers-reduced-motion: no-preference)';
+const pinTop = 64;
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.08,
-      },
-    },
-  };
+// Each group has a reading interval before moving; the final group gets a full interval.
+function panelAtProgress(progress) {
+  const position = Math.max(0, Math.min(progress, 1)) * skillGroups.length;
+  const panel = Math.min(Math.floor(position), skillGroups.length - 1);
+  if (panel === skillGroups.length - 1) return panel;
+  const transition = Math.max(0, Math.min((position - panel - 0.42) / 0.58, 1));
+  return panel + transition * transition * (3 - 2 * transition);
+}
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+export default function Skills() {
+  const { t, language } = useLanguage();
+  const stageRef = useRef(null);
+  const [layout, setLayout] = useState({ width: 0, distance: 0 });
+  const [activeGroup, setActiveGroup] = useState(0);
+  const horizontal = layout.width > 0;
+  // Match the exact CSS pin start and release: the frame stays below the 64px nav.
+  const { scrollYProgress } = useScroll({ target: stageRef, offset: ['start 64px', 'end end'] });
+  const x = useTransform(scrollYProgress, (progress) => -panelAtProgress(progress) * layout.width);
+
+  useMotionValueEvent(scrollYProgress, 'change', (progress) => {
+    setActiveGroup(Math.round(panelAtProgress(progress)));
+  });
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+    const media = window.matchMedia(horizontalQuery);
+    const measure = () => {
+      const width = media.matches ? stage.clientWidth : 0;
+      const distance = width ? Math.round(Math.max(520, window.innerHeight * 0.9) * skillGroups.length) : 0;
+      setLayout((previous) => previous.width === width && previous.distance === distance ? previous : { width, distance });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(stage);
+    media.addEventListener('change', measure);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => {
+      observer.disconnect();
+      media.removeEventListener('change', measure);
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  const selectGroup = (index) => {
+    const stage = stageRef.current;
+    if (!stage || !horizontal) return;
+    const start = stage.getBoundingClientRect().top + window.scrollY - pinTop;
+    scrollPageTo(start + ((index + 0.2) / skillGroups.length) * layout.distance);
   };
 
   return (
-    <section id="skills" className="section relative min-h-screen flex items-center justify-center px-4 sm:px-8 py-16 bg-base-200 overflow-hidden">
-      <div className="max-w-7xl w-full relative z-10 mt-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 text-center"
-        >
-          <h2 className="text-4xl md:text-5xl font-medium leading-tight">
-            <span className="text-base-content">{t('skills')}</span>
-          </h2>
-          <div className="w-16 h-1 bg-base-content/30 mt-4 mx-auto"></div>
-          <p className="text-lg text-base-content/80 mt-6 max-w-2xl mx-auto">
-            {t('skillsDescription')}
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skills.map((skillCategory, index) => (
-            <motion.div
-              key={skillCategory.category}
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="bg-base-100/50 backdrop-blur-sm border border-base-content/10 rounded-lg p-6"
-            >
-              <h3 className="text-xl font-medium text-base-content mb-6" data-font="english">
-                {skillCategory.category}
-              </h3>
-              <div className="space-y-4">
-                {skillCategory.items.map((skill) => (
-                  <motion.div
-                    key={skill.name}
-                    variants={itemVariants}
-                    className="flex items-center gap-4 p-3 rounded-lg hover:bg-base-200/50 transition-colors"
-                  >
-                    <div className="text-2xl">{skill.icon}</div>
-                    <span className="text-base text-base-content/90" data-font="english">{skill.name}</span>
-                  </motion.div>
+    <section id="skills" className={`site-section skills-section${horizontal ? ' is-horizontal' : ''}`} aria-labelledby="skills-title">
+      <div className="section-marker"><span>04</span><span>TOOLKIT</span></div>
+      <div ref={stageRef} className="skills-scroll-stage" style={horizontal ? { '--skills-distance': `${layout.distance}px` } : undefined}>
+        <div className="skills-scroll-sticky">
+          <div className="section-header-wide skills-heading">
+            <div><p className="eyebrow">CAPABILITIES / 03</p><h2 id="skills-title" className="display local-display">{t('skills')}</h2></div>
+            <p>{t('skillsDescription')}</p>
+          </div>
+          <div className="skills-window">
+            <motion.div className="skills-list" style={horizontal ? { x, width: layout.width * skillGroups.length } : { x: 0, width: '100%' }}>
+              {skillGroups.map(([category, skills], index) => (
+                <article id={`skill-group-${index + 1}`} key={category} className="skill-group" style={horizontal ? { width: layout.width } : undefined}>
+                  <div className="skill-group-heading">
+                    <span className="skill-number">0{index + 1} / 0{skillGroups.length}</span>
+                    <h3>{category}</h3>
+                  </div>
+                  <ul className="skill-technologies">
+                    {skills.map((skill) => <li key={skill}>{skill}</li>)}
+                  </ul>
+                </article>
+              ))}
+            </motion.div>
+          </div>
+          {horizontal && (
+            <div className="skills-navigation">
+              <div className="skills-reading-hint"><span>{language === 'th' ? 'เลื่อนเพื่อสำรวจทักษะ' : 'SCROLL TO EXPLORE'}</span><span aria-hidden="true">{String(activeGroup + 1).padStart(2, '0')} / 05 ↔</span></div>
+              <div className="skills-selectors" role="group" aria-label={language === 'th' ? 'เลือกกลุ่มทักษะ' : 'Select skill group'}>
+                {skillGroups.map(([category], index) => (
+                  <button type="button" key={category} onClick={() => selectGroup(index)} aria-current={activeGroup === index ? 'step' : undefined} aria-controls={`skill-group-${index + 1}`}>
+                    <span className="skill-selector-number">0{index + 1}</span><span>{category}</span>
+                  </button>
                 ))}
               </div>
-            </motion.div>
-          ))}
+              <div className="skills-track-progress" aria-hidden="true"><motion.span style={{ scaleX: scrollYProgress }} /></div>
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
-};
-
-export default SkillsPage;
+}

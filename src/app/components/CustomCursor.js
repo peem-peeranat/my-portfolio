@@ -1,88 +1,64 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
+
+const interactiveSelector = 'a, button, input, textarea, select, [role="button"], [data-cursor]';
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const cursorRef = useRef(null);
-  const rafRef = useRef(null);
-
-  const updateMousePosition = useCallback((e) => {
-    if (!isVisible) {
-      setIsVisible(true);
-    }
-
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = requestAnimationFrame(() => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    });
-  }, [isVisible]);
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovering(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false);
-  }, []);
+  const frameRef = useRef(null);
+  const activeTargetRef = useRef(null);
+  const [cursor, setCursor] = useState({ visible: false, interactive: false, label: '' });
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    document.addEventListener('mousemove', updateMousePosition, { passive: true });
+    const pointer = window.matchMedia('(pointer: fine)');
+    if (!pointer.matches || reduceMotion) return undefined;
 
-    const handleDocumentMouseLeave = () => {
-      setIsVisible(false);
+    const body = document.body;
+    body.classList.add('has-custom-cursor');
+
+    const setCursorState = (target) => {
+      if (target === activeTargetRef.current) return;
+      activeTargetRef.current = target;
+      setCursor((current) => ({ ...current, interactive: Boolean(target), label: target?.dataset.cursor ?? '' }));
     };
 
-    const handleDocumentMouseEnter = () => {
-      setIsVisible(true);
+    const handlePointerMove = (event) => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = requestAnimationFrame(() => {
+        cursorRef.current?.style.setProperty('transform', `translate3d(${event.clientX}px, ${event.clientY}px, 0)`);
+      });
+      setCursor((current) => current.visible ? current : { ...current, visible: true });
     };
 
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setIsVisible(false);
-      }
-    };
+    const handlePointerOver = (event) => setCursorState(event.target.closest(interactiveSelector));
+    const hideCursor = () => setCursor((current) => current.visible ? { ...current, visible: false } : current);
+    const showCursor = () => setCursor((current) => current.visible ? current : { ...current, visible: true });
+    const handleVisibilityChange = () => { if (document.hidden) hideCursor(); };
 
-    document.addEventListener('mouseleave', handleDocumentMouseLeave);
-    document.addEventListener('mouseenter', handleDocumentMouseEnter);
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    document.addEventListener('pointerover', handlePointerOver, { passive: true });
+    document.addEventListener('mouseleave', hideCursor);
+    document.addEventListener('mouseenter', showCursor);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    const interactiveElements = document.querySelectorAll('button, a, [role="button"], .btn, .link, input, textarea, .nav-link');
-
-    interactiveElements.forEach(element => {
-      element.addEventListener('mouseenter', handleMouseEnter, { passive: true });
-      element.addEventListener('mouseleave', handleMouseLeave, { passive: true });
-    });
-
     return () => {
-      document.removeEventListener('mousemove', updateMousePosition);
-      document.removeEventListener('mouseleave', handleDocumentMouseLeave);
-      document.removeEventListener('mouseenter', handleDocumentMouseEnter);
+      body.classList.remove('has-custom-cursor');
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerover', handlePointerOver);
+      document.removeEventListener('mouseleave', hideCursor);
+      document.removeEventListener('mouseenter', showCursor);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      interactiveElements.forEach(element => {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
-      });
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [updateMousePosition, handleMouseEnter, handleMouseLeave]);
+  }, [reduceMotion]);
 
   return (
-    <div
-      ref={cursorRef}
-      className={`custom-cursor ${isHovering ? 'hover' : ''}`}
-      style={{
-        transform: `translate(${mousePosition.x - 8}px, ${mousePosition.y - 8}px)`,
-        opacity: isVisible ? 1 : 0,
-        transition: isVisible ? 'opacity 0.1s ease' : 'none',
-      }}
-    />
+    <div ref={cursorRef} className={`custom-cursor${cursor.visible ? ' is-visible' : ''}${cursor.interactive ? ' is-interactive' : ''}${cursor.label ? ' has-label' : ''}`} aria-hidden="true">
+      <span className="custom-cursor-dot" />
+      <span className="custom-cursor-ring">{cursor.label}</span>
+    </div>
   );
-} 
+}

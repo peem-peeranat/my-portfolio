@@ -24,7 +24,7 @@ const categories = [
 ];
 
 // Real projects data
-const projects = [
+export const projects = [
   {
     id: 0,
     title: 'DDMS — Document & Data Management System',

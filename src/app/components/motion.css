@@ -1,0 +1,26 @@
+.tilt-surface { position: relative; isolation: isolate; }
+.tilt-plane { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--paper-deep); transform-origin: center; }
+.hero-image-frame.motion-portrait { overflow: visible; background: transparent; }
+.motion-portrait > .tilt-surface { position: absolute; inset: 0; }
+.hero-title .hero-title-line { overflow: hidden; }
+.hero-title .hero-title-line > span { transform-origin: 50% 100%; }
+.project-preview.tilt-surface { overflow: visible; background: transparent; }
+.project-preview.tilt-surface .tilt-plane { position: absolute; inset: 0; }
+.project-preview.tilt-surface a:focus-visible,
+.project-preview.tilt-surface button:focus-visible { outline-offset: -4px; }
+.project-preview.tilt-surface:has(:focus-visible)::after { position: absolute; z-index: 2; inset: 2px; border: 2px solid var(--accent); content: ""; pointer-events: none; }
+.project-row.motion-project-row { transform-origin: 50% 0; }
+.project-row.motion-project-row:focus-within { opacity: 1 !important; transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-plane,
+  .motion-portrait,
+  .hero-title .hero-title-line > span,
+  .project-row.motion-project-row { opacity: 1 !important; transform: none !important; }
+  .motion-portrait .hero-image,
+  .project-preview.tilt-surface .project-image { transform: none !important; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .tilt-plane { transform: none !important; }
+}
